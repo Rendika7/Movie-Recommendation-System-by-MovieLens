@@ -367,13 +367,24 @@ Selain pendekatan berbasis konten, kami juga menggunakan metode **Collaborative 
 2. **Evaluasi Model**:
    Kami melakukan cross-validation menggunakan metrik **RMSE** (Root Mean Squared Error) dan **MAE** (Mean Absolute Error). Hasil rata-rata dari 10 kali cross-validation menunjukkan bahwa model memiliki kinerja yang baik dengan nilai RMSE dan MAE yang rendah.
 
+    ![Cross-validation](https://github.com/Rendika7/Movie-Recommendation-System-by-MovieLens/blob/main/source/cross-validation%20for%20Model.png?raw=true)
+    
+    | Metric           | Fold 1 | Fold 2 | Fold 3 | Fold 4 | Fold 5 | Fold 6 | Fold 7 | Fold 8 | Fold 9 | Fold 10 | Mean   | Std    |
+    |------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------|--------|--------|
+    | **RMSE (testset)**| 0.8939 | 0.8987 | 0.8936 | 0.8895 | 0.8797 | 0.8940 | 0.8866 | 0.9079 | 0.8830 | 0.8939  | 0.8921 | 0.0076 |
+    | **MAE (testset)** | 0.6841 | 0.6892 | 0.6847 | 0.6884 | 0.6768 | 0.6902 | 0.6860 | 0.6976 | 0.6796 | 0.6847  | 0.6861 | 0.0055 |
+    | **Fit time (s)**  | 2.35   | 1.97   | 1.96   | 2.05   | 1.94   | 3.19   | 2.87   | 1.96   | 1.85   | 1.77    | 2.19   | 0.45   |
+    | **Test time (s)** | 0.06   | 0.07   | 0.06   | 0.06   | 0.10   | 0.11   | 0.09   | 0.07   | 0.07   | 0.06    | 0.08   | 0.02   |
+
 3. **Prediksi Rating**:
    Setelah model dilatih, kami melakukan prediksi rating untuk film-film yang belum ditonton oleh pengguna tertentu (misalnya pengguna dengan userId = 1). Model akan memprediksi seberapa besar kemungkinan pengguna menyukai film yang belum ditonton berdasarkan pola rating pengguna lain yang mirip.
 
+    ![Prediksi](https://github.com/Rendika7/Movie-Recommendation-System-by-MovieLens/blob/main/source/Prediski%20dan%20Ambil%20top%2010%20Recommend.png?raw=true)
+    
 4. **Top-N Recommendations**:
    Berdasarkan hasil prediksi, kami mengurutkan film-film yang belum ditonton dan memilih 10 film dengan prediksi rating tertinggi sebagai rekomendasi untuk pengguna.
 
----
+    ![Hasil Colaborative Filtering](https://github.com/Rendika7/Movie-Recommendation-System-by-MovieLens/blob/main/source/Hasil%20Colaborative%20Filtering.png?raw=true)
 
 ### Kesimpulan Modeling
 
@@ -381,13 +392,68 @@ Pada tahap ini, kami berhasil membangun dua sistem rekomendasi yang memanfaatkan
 
 Sistem rekomendasi berbasis konten mampu memberikan rekomendasi yang relevan berdasarkan karakteristik film itu sendiri, sementara collaborative filtering memberikan rekomendasi yang lebih personal berdasarkan pola rating pengguna lain. Keduanya digabungkan untuk menghasilkan sistem rekomendasi yang lebih holistik dan akurat.
 
-
-
-
 ## Evaluation
-Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+Pada proyek ini, tiga metrik evaluasi digunakan untuk menilai kinerja sistem rekomendasi: **Precision**, **RMSE**, dan **MAE**. Metrik ini membantu dalam mengevaluasi seberapa baik sistem dalam merekomendasikan film yang relevan dan seberapa akurat prediksi rating yang dihasilkan.
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+Sepertinya ada masalah dengan tampilan formula latex dalam markdown. Formula dapat di-render dengan benar menggunakan tanda kurung ganda di awal dan akhir, seperti berikut:
+
+---
+
+### 1. Precision
+Precision digunakan untuk mengevaluasi seberapa relevan rekomendasi yang dihasilkan oleh sistem berdasarkan genre dan tag yang dimiliki film target. Precision didefinisikan sebagai rasio antara rekomendasi yang relevan (dengan genre atau tag yang sama) dengan total rekomendasi yang dihasilkan.
+
+- **Rumus Precision**:
+
+  $` \text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}} `$
+
+  - **True Positives (Relevan)**: Film yang direkomendasikan memiliki genre atau tag yang mirip dengan film target.
+  - **False Positives (Tidak Relevan)**: Film yang direkomendasikan tetapi tidak memiliki genre atau tag yang mirip.
+
+Precision dalam kode dihitung berdasarkan kemiripan genre dan tag antara film yang direkomendasikan dan film target. Sebagai contoh, jika ada 10 film yang direkomendasikan dan 7 di antaranya relevan (memiliki genre/tag mirip), maka precision adalah 0.7 atau 70%.
+
+```python
+# Precision Calculation Example
+target_tags = set(smd.loc[movie_index, 'combined_clean'].split())
+relevant_recommendations = recommendations[recommendations['combined_clean'].apply(lambda x: len(target_tags.intersection(set(x.split()))) > 0)]
+precision = len(relevant_recommendations) / num_recommendations
+```
+
+Precision ini penting untuk mengevaluasi kualitas rekomendasi dalam konteks film-film yang serupa dengan film target, membantu pengguna mendapatkan hasil yang relevan.
+
+### 2. RMSE (Root Mean Squared Error)
+**RMSE** digunakan untuk mengukur seberapa akurat prediksi rating yang dihasilkan oleh sistem rekomendasi dibandingkan dengan rating yang sebenarnya diberikan oleh pengguna. RMSE menunjukkan akar rata-rata kuadrat dari kesalahan antara rating prediksi dan rating aktual.
+
+- **Rumus RMSE**:
+
+  $` RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2} `$
+
+  - $`(y_i\)`$ adalah rating sebenarnya, dan $`(\hat{y}_i)`$ adalah rating prediksi.
+
+RMSE memberikan informasi tentang sejauh mana prediksi sistem menyimpang dari nilai aktual. Semakin kecil nilai RMSE, semakin akurat prediksi sistem.
+
+### 3. MAE (Mean Absolute Error)
+**MAE** adalah metrik lain yang digunakan untuk mengukur kesalahan prediksi sistem. Berbeda dengan RMSE, MAE menghitung rata-rata absolut dari selisih antara rating yang diprediksi dengan rating sebenarnya, tanpa memperbesar dampak kesalahan yang lebih besar.
+
+- **Rumus MAE**:
+
+  $` MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i| `$
+
+MAE juga mengukur akurasi prediksi, tetapi memberikan hasil yang lebih mudah diinterpretasikan karena kesalahan dihitung secara linear.
+
+### Evaluasi Berdasarkan Hasil
+Hasil evaluasi model berdasarkan 10-fold cross-validation dengan algoritma **SVD** untuk RMSE dan MAE sebagai berikut:
+
+|         | Fold 1 | Fold 2 | Fold 3 | Fold 4 | Fold 5 | Fold 6 | Fold 7 | Fold 8 | Fold 9 | Fold 10 | Mean  | Std   |
+|---------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------|-------|-------|
+| **RMSE (testset)** | 0.8939 | 0.8987 | 0.8936 | 0.8895 | 0.8797 | 0.8940 | 0.8866 | 0.9079 | 0.8830 | 0.8939  | 0.8921 | 0.0076 |
+| **MAE (testset)**  | 0.6841 | 0.6892 | 0.6847 | 0.6884 | 0.6768 | 0.6902 | 0.6860 | 0.6976 | 0.6796 | 0.6847  | 0.6861 | 0.0055 |
+
+- **Rata-rata RMSE**: 0.8921
+- **Rata-rata MAE**: 0.6861
+
+Berdasarkan hasil ini, kita dapat menyimpulkan bahwa sistem rekomendasi memiliki tingkat kesalahan yang cukup kecil, baik dalam hal perhitungan rata-rata kuadrat (RMSE) maupun perhitungan kesalahan absolut (MAE). Precision juga memastikan bahwa rekomendasi yang diberikan oleh sistem sebagian besar relevan dengan film yang diminati pengguna.
+
+--- 
+
+Dengan evaluasi dari berbagai metrik ini, kita bisa mendapatkan gambaran yang lebih komprehensif mengenai kinerja sistem rekomendasi.
