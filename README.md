@@ -306,7 +306,7 @@ Secara matematis, cosine similarity antara dua vektor \( A \) dan \( B \) didefi
   \text{cosine similarity}(A, B) = \frac{A \cdot B}{\|A\| \|B\|}
   $$
   
-  - \( A \cdot B \) adalah **dot product** dari vektor \( A \) dan \( B \).
+  - \( A dot B \) adalah **dot product** dari vektor \( A \) dan \( B \).
   - \( \|A\| \) dan \( \|B\| \) adalah **norma (magnitudo)** dari vektor \( A \) dan \( B \), masing-masing, dihitung dengan rumus:
   
   $$
@@ -388,38 +388,6 @@ Sistem rekomendasi berbasis konten mampu memberikan rekomendasi yang relevan ber
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-## Modeling
-Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menyajikan dua solusi rekomendasi dengan algoritma yang berbeda.
-- Menjelaskan kelebihan dan kekurangan dari solusi/pendekatan yang dipilih.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Evaluation
 Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
@@ -427,9 +395,3 @@ Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, probl
 
 **Rubrik/Kriteria Tambahan (Opsional)**: 
 - Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
-
-**---Ini adalah bagian akhir laporan---**
-
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
