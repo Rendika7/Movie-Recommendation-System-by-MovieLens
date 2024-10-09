@@ -292,10 +292,6 @@ Langkah pertama dalam pembuatan sistem rekomendasi berbasis deskripsi film adala
 
    Hasilnya adalah matriks **TF-IDF** yang kemudian digunakan untuk menghitung kesamaan antar film menggunakan **cosine similarity**.
 
-Tentu, saya akan membetulkan format rumus agar bisa tampil dengan benar. Berikut adalah versi yang sudah diperbaiki:
-
----
-
 3. Cosine Similarity:
 Cosine similarity digunakan untuk mengukur kemiripan antara setiap deskripsi film dalam dataset. Matriks kesamaan yang dihasilkan menunjukkan seberapa mirip satu film dengan yang lainnya, dengan nilai antara 0 (tidak mirip) hingga 1 (sangat mirip).
 
